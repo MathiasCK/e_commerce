@@ -9,7 +9,7 @@ import {
 import { AddShoppingCart } from "@material-ui/icons";
 import React from "react";
 
-import useStyles from "./styles";
+import useStyles from "./product.styles";
 
 const Product = ({ product }) => {
   const classes = useStyles();
@@ -27,7 +27,7 @@ const Product = ({ product }) => {
           </Typography>
           <Typography variant="h5">{product.price}</Typography>
         </div>
-        <Typography variant="h2" color="textSecondary">
+        <Typography variant="body2" color="textSecondary">
           {product.description}
         </Typography>
         <CardActions disableSpacing className={classes.cardActions}>
