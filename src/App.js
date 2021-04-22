@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 // Components
-import { Products, Navbar, Cart } from "./components";
+import { Products, Navbar, Cart, Checkout } from "./components";
 import { useFetchCart } from "./context/CartContext";
 import { useFetchProducts } from "./context/ProductsContext";
 
@@ -24,6 +24,9 @@ const App = () => {
         </Route>
         <Route exact path="/">
           <Products />
+        </Route>
+        <Route exact path="/checkout">
+          <Checkout />
         </Route>
       </Switch>
     </Router>
