@@ -29,7 +29,7 @@ const App = () => {
     setCart(cart);
   };
 
-  const updateCartHandler = async (productId, quantity) => {
+  const updateCartQtyHandler = async (productId, quantity) => {
     const { cart } = await commerce.cart.update(productId, { quantity });
     setCart(cart);
   };
@@ -55,7 +55,12 @@ const App = () => {
         <Navbar totalItems={cart.total_items} />
         <Switch>
           <Route exact path="/cart">
-            <Cart cart={cart} emptyCart={emptyCartHandler} />
+            <Cart
+              cart={cart}
+              emptyCart={emptyCartHandler}
+              removeItem={removeCartHandler}
+              updateItemQty={updateCartQtyHandler}
+            />
           </Route>
           <Route exact path="/">
             <Products products={products} onAddToCart={addToCartHandler} />
