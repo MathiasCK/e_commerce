@@ -1,48 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 // Components
 import { Products, Navbar, Cart } from "./components";
-
-// Utils
-import { commerce } from "./utils/commerce";
+import { useCart, useFetchCart } from "./context/CartContext";
+import { useFetchProducts } from "./context/ProductsContext";
 
 const App = () => {
-  const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState({});
+  const fetchProducts = useFetchProducts();
 
-  const fetchProducts = async () => {
-    const { data } = await commerce.products.list();
-
-    setProducts(data);
-  };
-
-  const fetchCart = async () => {
-    const cart = await commerce.cart.retrieve();
-
-    setCart(cart);
-    //setCart(await commerce.cart.retrieve())
-  };
-
-  const addToCartHandler = async (productId, quantity) => {
-    const { cart } = await commerce.cart.add(productId, quantity);
-    setCart(cart);
-  };
-
-  const updateCartQtyHandler = async (productId, quantity) => {
-    const { cart } = await commerce.cart.update(productId, { quantity });
-    setCart(cart);
-  };
-
-  const removeCartHandler = async (productId) => {
-    const { cart } = await commerce.cart.remove(productId);
-    setCart(cart);
-  };
-
-  const emptyCartHandler = async () => {
-    const { cart } = await commerce.cart.empty();
-    setCart(cart);
-  };
+  const cart = useCart();
+  const fetchCart = useFetchCart();
 
   useEffect(() => {
     fetchProducts();
@@ -55,15 +23,10 @@ const App = () => {
         <Navbar totalItems={cart.total_items} />
         <Switch>
           <Route exact path="/cart">
-            <Cart
-              cart={cart}
-              emptyCart={emptyCartHandler}
-              removeItem={removeCartHandler}
-              updateItemQty={updateCartQtyHandler}
-            />
+            <Cart />
           </Route>
           <Route exact path="/">
-            <Products products={products} onAddToCart={addToCartHandler} />
+            <Products />
           </Route>
         </Switch>
       </div>

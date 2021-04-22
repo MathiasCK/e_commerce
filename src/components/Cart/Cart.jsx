@@ -1,11 +1,16 @@
 import { Container, Typography, Button, Grid } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
+import { useEmptyCartHandler, useCart } from "../../context/CartContext";
+
 import useStyles from "./cart.styles";
 import CartItem from "./CartItem/CartItem";
 
-const Cart = ({ cart, emptyCart, removeItem, updateItemQty }) => {
+const Cart = () => {
   const classes = useStyles();
+
+  const emptyCart = useEmptyCartHandler();
+  const cart = useCart();
 
   const EmptyCart = () => (
     <Typography variant="subtitle1">
@@ -21,11 +26,7 @@ const Cart = ({ cart, emptyCart, removeItem, updateItemQty }) => {
       <Grid container spacing={3}>
         {cart.line_items.map((cartItem) => (
           <Grid item xs={12} sm={4} key={cartItem.id}>
-            <CartItem
-              updateItemQty={updateItemQty}
-              removeItem={removeItem}
-              cartItem={cartItem}
-            />
+            <CartItem cartItem={cartItem} />
           </Grid>
         ))}
       </Grid>

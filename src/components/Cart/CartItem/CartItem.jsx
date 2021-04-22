@@ -7,11 +7,17 @@ import {
   CardMedia,
 } from "@material-ui/core";
 import React from "react";
+import {
+  useRemoveCartHandler,
+  useUpdateCartHandler,
+} from "../../../context/CartContext";
 
 import useStyles from "./cart-item-styles";
 
-const CartItem = ({ cartItem, removeItem, updateItemQty }) => {
+const CartItem = ({ cartItem }) => {
   const classes = useStyles();
+  const removeItem = useRemoveCartHandler();
+  const updateItemQty = useUpdateCartHandler();
   return (
     <Card>
       <CardMedia

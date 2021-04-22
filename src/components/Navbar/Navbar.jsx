@@ -12,12 +12,16 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import logo from "../../assets/commerce.png";
+import { useCart } from "../../context/CartContext";
 
 import useStyles from "./navbar.styles";
 
-const Navbar = ({ totalItems }) => {
+const Navbar = () => {
   const classes = useStyles();
   const location = useLocation();
+
+  const cart = useCart();
+  const totalItems = cart.total_items;
 
   return (
     <div>
