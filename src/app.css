@@ -1,0 +1,13 @@
+.input {
+  border: none;
+  border-bottom: 1px solid grey;
+  outline: none;
+  margin: 1rem auto;
+  padding: 1rem;
+  max-width: 100%;
+  transition: all 0.3s ease;
+}
+
+.input:hover {
+  border-bottom: 1px solid black;
+}

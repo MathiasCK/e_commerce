@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Products, Navbar, Cart, Checkout } from "./components";
 import { useFetchCart } from "./context/CartContext";
 import { useFetchProducts } from "./context/ProductsContext";
-
+import "./app.css";
 const App = () => {
   const fetchProducts = useFetchProducts();
   const fetchCart = useFetchCart();

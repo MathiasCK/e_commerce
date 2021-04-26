@@ -5,6 +5,8 @@ const CartContext = createContext({});
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState({});
+  const [order, setOrder] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
 
   const fetchCart = async () => {
     const cart = await commerce.cart.retrieve();
@@ -30,13 +32,37 @@ export const CartProvider = ({ children }) => {
 
   const emptyCartHandler = async () => {
     const { cart } = await commerce.cart.empty();
+    console.log("EMPTYING", cart);
     setCart(cart);
+  };
+
+  const refreshCart = async () => {
+    const newCart = await commerce.cart.refresh();
+    console.log("REFRESHING", newCart);
+    setCart(newCart);
+  };
+
+  const handleCaptureCheckout = async (checkoutTokenId, newOrder) => {
+    try {
+      const incomingOrder = await commerce.checkout.capture(
+        checkoutTokenId,
+        newOrder
+      );
+      setOrder(incomingOrder);
+      await emptyCartHandler();
+      await refreshCart();
+    } catch (error) {
+      setErrorMessage(error.data.error.message);
+    }
   };
 
   return (
     <CartContext.Provider
       value={{
         cart,
+        order,
+        errorMessage,
+        handleCaptureCheckout,
         fetchCart,
         addToCartHandler,
         updateCartHandler,
@@ -52,6 +78,13 @@ export const CartProvider = ({ children }) => {
 export const useCartContext = () => useContext(CartContext);
 
 export const useCart = () => useCartContext().cart;
+
+export const useOrder = () => useCartContext().order;
+
+export const useErrorMessage = () => useCartContext().errorMessage;
+
+export const useHandleCaptureCheckout = () =>
+  useCartContext().handleCaptureCheckout;
 
 export const useFetchCart = () => useCartContext().fetchCart;
 
