@@ -13,68 +13,41 @@ import { Link } from "react-router-dom";
 
 import { commerce } from "../../../utils/commerce";
 import { useCart } from "../../../context/CartContext";
+import {
+  useCountries,
+  useFetchShippingCountries,
+  useFetchShippingOptions,
+  useFetchSubDivisions,
+  useOptions,
+  useSetShippingOption,
+  useSetShippingSubdivision,
+  useShippingCountry,
+  useShippingOption,
+  useShippingOptions,
+  useShippingSubDivision,
+  useSudivisions,
+} from "../../../context/ShippingContext";
 
 const AddressForm = ({ checkoutToken, next }) => {
   const methods = useForm();
   const cart = useCart();
 
-  const [shippingCountries, setShippingCountries] = useState([]);
-  const [shippingCountry, setShippingCountry] = useState("");
+  const shippingCountry = useShippingCountry();
+  const shippingSubdivsion = useShippingSubDivision();
+  const shippingOption = useShippingOption();
+  const shippingOptions = useShippingOptions();
 
-  const [shippingSubdivsions, setShippingSubdivisions] = useState([]);
-  const [shippingSubdivsion, setShippingSubdivision] = useState("");
+  const setShippingCountry = useShippingCountry();
+  const setShippingSubdivision = useSetShippingSubdivision();
+  const setShippingOption = useSetShippingOption();
 
-  const [shippingOptions, setShippingOptions] = useState([]);
-  const [shippingOption, setShippingOption] = useState("");
+  const countries = useCountries();
+  const subdivisions = useSudivisions();
+  const options = useOptions();
 
-  const countries = Object.entries(shippingCountries).map(([code, name]) => ({
-    id: code,
-    label: name,
-  }));
-
-  const subdivisions = Object.entries(shippingSubdivsions).map(
-    ([code, name]) => ({
-      id: code,
-      label: name,
-    })
-  );
-
-  const options = shippingOptions.map((s_Option) => ({
-    id: s_Option.id,
-    label: `${s_Option.description} - (${s_Option.price.formatted_with_symbol})`,
-  }));
-
-  const fetchShippingCountries = async (checkoutTokenId) => {
-    const { countries } = await commerce.services.localeListShippingCountries(
-      checkoutTokenId
-    );
-
-    setShippingCountries(countries);
-    // [ NO, SE, DE ] ...
-    setShippingCountry(Object.keys(countries)[0]);
-  };
-
-  const fetchSubDivisions = async (countryCode) => {
-    const { subdivisions } = await commerce.services.localeListSubdivisions(
-      countryCode
-    );
-    setShippingSubdivisions(subdivisions);
-    setShippingSubdivision(Object.keys(subdivisions)[0]);
-  };
-
-  const fetchShippingOptions = async (
-    checkoutTokenId,
-    country,
-    region = null
-  ) => {
-    const options = await commerce.checkout.getShippingOptions(
-      checkoutTokenId,
-      { country, region }
-    );
-
-    setShippingOptions(options);
-    setShippingOption(options[0].id);
-  };
+  const fetchShippingCountries = useFetchShippingCountries();
+  const fetchSubDivisions = useFetchSubDivisions();
+  const fetchShippingOptions = useFetchShippingOptions();
 
   useEffect(() => {
     fetchShippingCountries(checkoutToken.id);
